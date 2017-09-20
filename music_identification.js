@@ -4,7 +4,6 @@ var crypto = require('crypto');
 var fs = require('fs');
 var qs = require('querystring');
 
-
 var loadBody = function (res) {
     var deferred = Q.defer();
     var data = '';
@@ -77,6 +76,12 @@ function recogize(host, access_key, secret_key, query_data, query_type) {
         return loadBody(res);
     }).then(function(data) {
         var band = JSON.parse(data);
+
+        if (band === undefined)                { return ""; }
+        if (band.metadata === undefined)       { return ""; }
+        if (band.metadata.music === undefined) { return ""; }
+        if (band.metadata.mulsic.length === 0) { return ""; }
+
         return band.metadata.music[0].artists[0].name;
     }).catch(function(error) {
         console.log(error);
